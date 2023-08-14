@@ -1,0 +1,42 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Identity.Service.identityProtos";
+
+package identity;
+
+message ServiceStatus {
+  int32 code = 1;
+  string message = 2;
+}
+
+message RegisterOutputModels {
+  string token = 1;
+  string email = 2;
+  string login = 3;
+  string role = 4;
+}
+
+message AuthRequest {
+  string login_or_email = 1;
+  string password = 2;
+}
+
+message ServiceResponse {
+  ServiceStatus status = 1;
+  RegisterOutputModels data = 2;
+}
+
+service IdentityGrpc {
+  // Register a user
+  rpc Register (RegisterRequest) returns (ServiceResponse);
+
+  // Authenticate a user
+  rpc Authenticate (AuthRequest) returns (ServiceResponse);
+}
+
+// The request message containing registration data.
+message RegisterRequest {
+  string email = 1;
+  string login = 2;
+  string password = 3;
+}
