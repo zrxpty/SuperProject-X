@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Grpc.Net.Client;
 using Grpc.Core;
 using ClientWebApp;
-
-
+using Microsoft.AspNetCore.Authorization;
+using WebApplication1.Atributes;
 
 namespace WebApplication1.Controllers
 {
@@ -67,6 +67,13 @@ namespace WebApplication1.Controllers
             {
                 return Ok($"RpcException: StatusCode={ex.StatusCode}, Detail={ex.Status.Detail}");
             }
+        }
+
+        [Auth]
+        [HttpGet]
+        public async Task<IActionResult> Testtqweq()
+        {
+            return Ok();
         }
     }
 }
