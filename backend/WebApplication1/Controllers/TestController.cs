@@ -20,7 +20,7 @@ namespace GATEWAY.Controllers
         public async Task<IActionResult> Register()
         {
             var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri("service-identity/");
+            httpClient.BaseAddress = new Uri("http://service-identity:5001/");
             var response = await httpClient.GetAsync("api/public/lubov");
             var responseBody = await response.Content.ReadAsStringAsync();
             return Ok(responseBody);

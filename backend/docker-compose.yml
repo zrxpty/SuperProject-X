@@ -24,7 +24,7 @@ services:
       - "5001:80"
     depends_on:
       - postgres_identity
-    
+    hostname: service-identity
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     
