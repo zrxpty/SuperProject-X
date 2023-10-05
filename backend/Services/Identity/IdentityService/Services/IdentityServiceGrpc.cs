@@ -20,6 +20,7 @@ namespace Identity.Service.Services
 
         public override async Task<ServiceResponse> Register(RegisterRequest request, ServerCallContext context)
         {
+            _logger.LogInformation($"{request.Email}");
             var registerInput = new RegisterInputModel
             {
                 Email = request.Email,

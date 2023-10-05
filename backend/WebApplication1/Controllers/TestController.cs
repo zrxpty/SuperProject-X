@@ -1,79 +1,31 @@
 using Microsoft.AspNetCore.Mvc;
-using Grpc.Net.Client;
-using Grpc.Core;
-using ClientWebApp;
-using Microsoft.AspNetCore.Authorization;
-using WebApplication1.Atributes;
+using GATEWAY.Controllers.CustomController;
 
-namespace WebApplication1.Controllers
+namespace GATEWAY.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class TestController : ControllerBase
+    [Route("api/[controller]")]
+    public class TestController : DefaultController
     {
 
         private readonly ILogger<TestController> _logger;
 
-
         public TestController(ILogger<TestController> logger)
         {
             _logger = logger;
+            
         }
 
-        [HttpPost(Name = "Register")]
-        public async Task<IActionResult> Get([FromBody] RegisterRequest registerRequest)
+        [HttpPost("register")]
+        public async Task<IActionResult> Register()
         {
-            using var channel = GrpcChannel.ForAddress("https://localhost:7275");
-            try
-            {
-                var newClient = new IdentityGrpc.IdentityGrpcClient(channel);
-                var registerResponse = await newClient.RegisterAsync(registerRequest);
-
-                if (registerResponse.Status.Code == 200)
-                {
-                    return Ok($"{registerResponse}");
-                }
-                else
-                {
-                    return Ok($"{registerResponse.Status.Message}");
-                }
-            }
-            catch (RpcException ex)
-            {
-                return Ok($"RpcException: StatusCode={ex.StatusCode}, Detail={ex.Status.Detail}");
-            }
-
+            var httpClient = new HttpClient();
+            using var request = new HttpRequestMessage(HttpMethod.Get, "http://host.docker.internal:5001/api/public/lubov");
+            using var response = await httpClient.SendAsync(request);
+            var responseBody = await response.Content.ReadAsStringAsync();
+            return Ok(responseBody);
         }
 
-        [HttpPost("Login")]
-        public async Task<IActionResult> Auth([FromBody] AuthRequest authRequest)
-        {
-            using var channel = GrpcChannel.ForAddress("https://localhost:7275");
-            try
-            {
-                var newClient = new IdentityGrpc.IdentityGrpcClient(channel);
-                var authResponse = await newClient.AuthenticateAsync(authRequest);
 
-                if (authResponse.Status.Code == 200)
-                {
-                    return Ok($"{authResponse}");
-                }
-                else
-                {
-                    return Ok($"{authResponse}");
-                }
-            }
-            catch (RpcException ex)
-            {
-                return Ok($"RpcException: StatusCode={ex.StatusCode}, Detail={ex.Status.Detail}");
-            }
-        }
-
-        [Auth]
-        [HttpGet]
-        public async Task<IActionResult> Testtqweq()
-        {
-            return Ok();
-        }
     }
 }

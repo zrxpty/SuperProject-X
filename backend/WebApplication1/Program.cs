@@ -1,9 +1,8 @@
-
-
+using GATEWAY.Services.IdentityService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Text;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,21 +12,6 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidIssuer = builder.Configuration["AuthSettings:ISSUER"],
-            ValidateAudience = true,
-            ValidAudience = builder.Configuration["AuthSettings:AUDIENCE"],
-            ValidateLifetime = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AuthSettings:KEY"])),
-            ValidateIssuerSigningKey = true,
-        };
-    });
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -39,25 +23,66 @@ builder.Services.AddSwaggerGen(c =>
         Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
     });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        },
+                        Scheme = "oauth2",
+                        Name = "Bearer",
+                        In = ParameterLocation.Header,
+
+                    },
+                    new List<string>()
+                }
+            });
 });
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = builder.Configuration["AuthSettings:ISSUER"],
+                        ValidateAudience = false,
+                        ValidAudience = builder.Configuration["AuthSettings:AUDIENCE"],
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
+
+builder.Services.AddScoped<IIdentityService, IdentityService>();
+
+
 
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+if (app.Environment.IsDevelopment()) {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "myappname v1"));
+    
 }
+else
+    app.UseHttpsRedirection();
 
-app.UseHttpsRedirection();
 
+app.UseRouting();
+
+app.UseAuthentication(); 
 app.UseAuthorization();
 
-app.UseAuthentication();
-app.UseAuthorization();
+app.MapGet("/", () => "qweqweqweqweqweqeqweqwe12222222222222");
 
 app.MapControllers();
 

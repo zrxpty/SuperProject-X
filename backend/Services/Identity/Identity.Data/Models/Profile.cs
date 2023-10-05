@@ -21,5 +21,6 @@ namespace Identity.Data.Models
 
         public string? Sex { get; set; }
         public string? City { get; set; }
+        public string? Region { get; set; } = string.Empty;
     }
 }

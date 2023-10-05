@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Npgsql;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,38 +17,32 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddGrpc();
 
-var connection = builder.Configuration.GetConnectionString("DefaultConnection");
+//var connection = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-builder.Services.AddDbContext<IdentityDbContext>(options => options.UseSqlServer(connection));
+builder.Services.AddDbContext<IdentityDbContext>(o => o.UseNpgsql(connectionString));
+
+//builder.Services.AddDbContext<IdentityDbContext>(options => options.UseSqlServer(connection));
 
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IRepositotyService, RepositoryService>();
 
 
 builder.Services.AddAuthorization();
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidIssuer = builder.Configuration["AuthSettings:ISSUER"],
-            ValidateAudience = true,
-            ValidAudience = builder.Configuration["AuthSettings:AUDIENCE"],
-            ValidateLifetime = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AuthSettings:KEY"])),
-            ValidateIssuerSigningKey = true,
-        };
-    });
 
 var app = builder.Build();
 
-app.UseAuthentication();
-app.UseAuthorization();
+using (var scope = app.Services.CreateScope()) 
+{
+    await using (var db = scope.ServiceProvider.GetRequiredService<IdentityDbContext>())
+    {
+        await db.Database.MigrateAsync();
+    }
+}
 
 // Configure the HTTP request pipeline.
 app.MapGrpcService<IdentityServiceGrpc>();
-app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+app.MapGet("/", () => "qweqweqweqweqweqeqweqwe12222222222222GRPC");
 
 
 
