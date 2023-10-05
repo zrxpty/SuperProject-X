@@ -20,8 +20,8 @@ namespace GATEWAY.Controllers
         public async Task<IActionResult> Register()
         {
             var httpClient = new HttpClient();
-            using var request = new HttpRequestMessage(HttpMethod.Get, "service-identity/api/public/lubov");
-            using var response = await httpClient.SendAsync(request);
+            httpClient.BaseAddress = new Uri("service-identity/");
+            var response = await httpClient.GetAsync("api/public/lubov");
             var responseBody = await response.Content.ReadAsStringAsync();
             return Ok(responseBody);
         }
