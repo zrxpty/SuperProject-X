@@ -16,7 +16,7 @@ namespace GATEWAY.Controllers
             
         }
 
-        [HttpPost("register")]
+        [HttpPost("for-you")]
         public async Task<IActionResult> Register()
         {
             var httpClient = new HttpClient();
