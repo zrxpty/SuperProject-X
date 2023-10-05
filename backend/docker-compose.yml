@@ -5,7 +5,7 @@ volumes:
 
 services:
   gateway:
-    image: ${DOCKER_REGISTRY-}gateway
+    image: gateway
     build:
       context: .
       dockerfile: WebApplication1/Dockerfile
@@ -18,7 +18,7 @@ services:
 
 
   service-identity:
-    image: ${DOCKER_REGISTRY-}service-identity
+    image: service-identity
     build:
       context: .
       dockerfile: Services/Identity/Identity.API/Identity.API/Dockerfile
