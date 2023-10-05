@@ -20,7 +20,7 @@ namespace GATEWAY.Controllers
         public async Task<IActionResult> Register()
         {
             var httpClient = new HttpClient();
-            using var request = new HttpRequestMessage(HttpMethod.Get, "http://host.docker.internal:5001/api/public/lubov");
+            using var request = new HttpRequestMessage(HttpMethod.Get, "service-identity/api/public/lubov");
             using var response = await httpClient.SendAsync(request);
             var responseBody = await response.Content.ReadAsStringAsync();
             return Ok(responseBody);
