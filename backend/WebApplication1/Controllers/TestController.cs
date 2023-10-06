@@ -21,7 +21,7 @@ namespace GATEWAY.Controllers
         {
             var httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri("http://service-identity:80/", UriKind.Absolute);
-            var response = await httpClient.GetAsync("api/public/lubov");
+            var response = await httpClient.GetAsync("api/public/aoao");
             var responseBody = await response.Content.ReadAsStringAsync();
             return Ok(responseBody);
         }
