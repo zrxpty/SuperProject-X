@@ -15,10 +15,10 @@ namespace Identity.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet("public/lubov")]
+        [HttpGet("public/aoao")]
         public async Task<ActionResult> Love()
         {
-            return Ok(new Response() { Message = "service by Nikita send Tanyha a love kiss via http" });
+            return Ok(new Response() { Message = "service by Nikita send via http" });
         }
 
         public class Response
