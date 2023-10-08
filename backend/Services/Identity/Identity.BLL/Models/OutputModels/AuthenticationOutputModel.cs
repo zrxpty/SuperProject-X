@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Identity.BLL.Models.OutputModels
 {
-    public class RegisterOutputModel
+    public class AuthenticationOutputModel
     {
         public string Token { get; set; }
 

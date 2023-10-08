@@ -1,4 +1,5 @@
 ﻿using Identity.BLL.Inrefaces;
+using Identity.BLL.Models;
 using Identity.BLL.Models.InputModels;
 using Identity.BLL.Models.OutputModels;
 using Identity.Data;
@@ -6,6 +7,7 @@ using Identity.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -23,7 +25,7 @@ namespace Identity.BLL.Services
             _configuration = configuration;
         }
 
-        public async Task<RegisterOutputModel> Authenticate(AuthenticateInputModel input)
+        public async Task<ServiceResponse<AuthenticationOutputModel>> Authenticate(AuthenticateInputModel input)
         {
             var user = await _db.UserAccounts
                                 .Where(x => x.Email == input.Login || x.Login == input.Login)
@@ -31,7 +33,7 @@ namespace Identity.BLL.Services
 
             if (user != null && DecodeFrom64(user.Password) == input.Password)
             {
-                var token = await _db.Verifications.Where(x => x.UserAccountId == user.Id).FirstOrDefaultAsync();
+                /*var token = await _db.Verifications.Where(x => x.UserAccountId == user.Id).FirstOrDefaultAsync();
                 if (token != null)
                 {
                     token.Token = await GenerateToken(user);
@@ -41,31 +43,32 @@ namespace Identity.BLL.Services
                     token.Token = await GenerateToken(user);
                     token.UserAccountId = user.Id;
 
-                }
+                }*/
 
                 await _db.SaveChangesAsync();
 
-                return new RegisterOutputModel
+                return new()
                 {
-                    Login = user.Login,
-                    Email = user.Email,
-                    Token = token.Token,
-                    Role = (await _db.Roles.Where(x => x.UserAccountId == user.Id).FirstAsync()).Role
+                    Data = new AuthenticationOutputModel
+                    {
+                        Login = user.Login,
+                        Email = user.Email,
+                        Token = "",
+                        Role = (await _db.Roles.Where(x => x.UserAccountId == user.Id).FirstAsync()).Role
+                    }
                 };
+               
             }
             else
             {
-                return new RegisterOutputModel
+                return new()
                 {
-                    Email = "",
-                    Login = "",
-                    Token = "",
-                    Role = "",
+                    Message = "Пошел ты кого взломать хочешь?"
                 };
             }
         }
 
-        public async Task<RegisterOutputModel> CreateUser(RegisterInputModel input)
+        public async Task<ServiceResponse<AuthenticationOutputModel>> CreateUser(RegisterInputModel input)
         {
             var userWithSameEmail = await _db.UserAccounts
                 .FirstOrDefaultAsync(x => x.Email == input.Email);
@@ -75,25 +78,17 @@ namespace Identity.BLL.Services
 
             if (userWithSameEmail != null)
             {
-                return new RegisterOutputModel
+                return new()
                 {
-                    Token = "",
-                    Email = input.Email,
-                    Login = input.Login,
-                    Role = ""
-
+                    Message = "Пошел ты кого взломать хочешь?"
                 };
             }
 
             if (userWithSameLogin != null)
             {
-                return new RegisterOutputModel
+                return new()
                 {
-                    Token = "",
-                    Email = input.Email,
-                    Login = input.Login,
-                    Role = ""
-
+                    Message = "Пошел ты кого взломать хочешь?"
                 };
             }
 
@@ -113,7 +108,7 @@ namespace Identity.BLL.Services
                 BirthDay = null,
                 City = null,
                 Sex = null,
-                CreatedDate = DateTime.Now
+                CreatedDate = DateTime.UtcNow
             };
 
             await _db.Profiles.AddAsync(profile);
@@ -124,23 +119,17 @@ namespace Identity.BLL.Services
                 UserAccountId = user.Id
             };
 
-            var verification = new Verification()
-            {
-                UserAccountId = user.Id,
-                Token = await GenerateToken(user)
-            };
-
-            await _db.Roles.AddAsync(role);
-            await _db.Verifications.AddAsync(verification);
-
             await _db.SaveChangesAsync();
 
-            return new RegisterOutputModel
-            {
-                Token = verification.Token,
-                Email = input.Email,
-                Login = input.Login,
-                Role = role.Role
+            return new() {
+                Data = new AuthenticationOutputModel
+                {
+                    Token = await GenerateToken(user, role.Role),
+                    Email = input.Email,
+                    Login = input.Login,
+                    Role = role.Role
+                }
+
             };
         }
 
@@ -171,19 +160,33 @@ namespace Identity.BLL.Services
             return result;
         }
 
-        private async Task<string> GenerateToken(UserAccount input)
+        private async Task<string> GenerateToken(UserAccount input, string role)
         {
-            var claims = new List<Claim> { new Claim(ClaimTypes.Name, input.Login) };
+            var tokenExpiryTimeStamp = DateTime.Now.AddMinutes(20);
+            var tokenKey = Encoding.ASCII.GetBytes(_configuration["AuthSettings:KEY"]);
+            var claimsIdentity = new ClaimsIdentity(new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Name, input.Login),
+                new Claim("Id", input.Id.ToString()),
+                new Claim("Role", role)
+            });
 
-            var jwt = new JwtSecurityToken(
-                issuer: _configuration["AuthSettings:ISSUER"],
-                audience: _configuration["AuthSettings:AUDIENCE"],
-                claims: claims,
-                expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)),
-                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["AuthSettings:KEY"])), SecurityAlgorithms.HmacSha256));
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+            var signingCredentials = new SigningCredentials(
+                new SymmetricSecurityKey(tokenKey),
+                SecurityAlgorithms.HmacSha256Signature);
 
-            return encodedJwt;
+            var securityTokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = claimsIdentity,
+                Expires = tokenExpiryTimeStamp,
+                SigningCredentials = signingCredentials
+            };
+
+            var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+            var securityToken = jwtSecurityTokenHandler.CreateToken(securityTokenDescriptor);
+            var token = jwtSecurityTokenHandler.WriteToken(securityToken);
+
+            return token;
         }
 
         

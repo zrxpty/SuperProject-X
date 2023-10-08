@@ -8,7 +8,7 @@ services:
     image: gateway
     build:
       context: .
-      dockerfile: WebApplication1/Dockerfile
+      dockerfile: GATEWAY/Dockerfile
     ports:
       - "5200:80"
     environment:
@@ -28,6 +28,18 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     
+  service-other:
+    image: service-other
+    build:
+      context: .
+      dockerfile: Services/Other/Other.Api/Dockerfile
+    ports:
+      - "5002:80"
+    depends_on:
+      - postgres_identity
+    hostname: service-other
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
     
 
 
@@ -38,6 +50,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123
       POSTGRES_DB: service-identity
+      TZ: UTC
     ports:
       - "5434:5432"
     volumes:
@@ -48,7 +61,7 @@ services:
   pgadmin:
     container_name: pgadmin4_container
     image: dpage/pgadmin4
-    restart: always
+    restart: always    
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: root

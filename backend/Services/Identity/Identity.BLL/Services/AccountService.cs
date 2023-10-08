@@ -1,4 +1,5 @@
 ﻿using Identity.BLL.Inrefaces;
+using Identity.BLL.Models;
 using Identity.BLL.Models.InputModels;
 using Identity.BLL.Models.OutputModels;
 using System;
@@ -19,12 +20,12 @@ namespace Identity.BLL.Services
             _repositotyService = repositotyService;
         }
 
-        public async Task<RegisterOutputModel> Register(RegisterInputModel input)
+        public async Task<ServiceResponse<AuthenticationOutputModel>> Register(RegisterInputModel input)
         {
             return await _repositotyService.CreateUser(input);
         }
 
-        public async Task<RegisterOutputModel> Authenticate(AuthenticateInputModel input)
+        public async Task<ServiceResponse<AuthenticationOutputModel>> Authenticate(AuthenticateInputModel input)
         {
             return await _repositotyService.Authenticate(input);
         }

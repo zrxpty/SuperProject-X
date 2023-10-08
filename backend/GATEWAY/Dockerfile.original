@@ -7,10 +7,10 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["WebApplication1/GATEWAY.csproj", "WebApplication1/"]
-RUN dotnet restore "WebApplication1/GATEWAY.csproj"
+COPY ["GATEWAY/GATEWAY.csproj", "GATEWAY/"]
+RUN dotnet restore "GATEWAY/GATEWAY.csproj"
 COPY . .
-WORKDIR "/src/WebApplication1"
+WORKDIR "/src/GATEWAY"
 RUN dotnet build "GATEWAY.csproj" -c Release -o /app/build
 
 FROM build AS publish

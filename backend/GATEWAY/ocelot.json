@@ -1,0 +1,61 @@
+﻿{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/api/Identity/register",
+      "DownstreamPathTemplate": "/api/Identity/register",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "service-identity",
+          "Port": 80
+        }
+      ],
+      "UpstreamHttpMethod": [ "Post" ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/Identity/qwe",
+      "DownstreamPathTemplate": "/api/Identity/qwe",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "service-identity",
+          "Port": 80
+        }
+      ],
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Other Service
+    {
+      "UpstreamPathTemplate": "/api/other/checkclaims",
+      "DownstreamPathTemplate": "/api/other/checkclaims",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "service-other",
+          "Port": 80
+        }
+      ],
+      "UpstreamHttpMethod": [ "Get" ] 
+    }
+
+  ]
+}
