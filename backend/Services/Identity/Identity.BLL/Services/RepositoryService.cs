@@ -4,6 +4,7 @@ using Identity.BLL.Models.InputModels;
 using Identity.BLL.Models.OutputModels;
 using Identity.Data;
 using Identity.Data.Models;
+using JwtAuthenticationManager;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -124,7 +125,7 @@ namespace Identity.BLL.Services
             return new() {
                 Data = new AuthenticationOutputModel
                 {
-                    Token = await GenerateToken(user, role.Role),
+                    Token = GenerateToken(user, role.Role),
                     Email = input.Email,
                     Login = input.Login,
                     Role = role.Role
@@ -160,35 +161,29 @@ namespace Identity.BLL.Services
             return result;
         }
 
-        private async Task<string> GenerateToken(UserAccount input, string role)
+        private string GenerateToken(UserAccount input, string role)
         {
-            var tokenExpiryTimeStamp = DateTime.Now.AddMinutes(20);
-            var tokenKey = Encoding.ASCII.GetBytes(_configuration["AuthSettings:KEY"]);
-            var claimsIdentity = new ClaimsIdentity(new List<Claim>
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(AuthOptions.KEY);
+            var tokenDescriptor = new SecurityTokenDescriptor
             {
-                new Claim(JwtRegisteredClaimNames.Name, input.Login),
-                new Claim("Id", input.Id.ToString()),
-                new Claim("Role", role)
-            });
-
-            var signingCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(tokenKey),
-                SecurityAlgorithms.HmacSha256Signature);
-
-            var securityTokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = claimsIdentity,
-                Expires = tokenExpiryTimeStamp,
-                SigningCredentials = signingCredentials
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+            new Claim(JwtRegisteredClaimNames.Name, input.Login),
+            new Claim("Id", input.Id.ToString()),
+            new Claim("Role", role)
+                }),
+                Issuer = AuthOptions.ISSUER,
+                Audience = AuthOptions.AUDIENCE,
+                Expires = DateTime.UtcNow.AddMinutes(20),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
-            var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-            var securityToken = jwtSecurityTokenHandler.CreateToken(securityTokenDescriptor);
-            var token = jwtSecurityTokenHandler.WriteToken(securityToken);
-
-            return token;
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
 
-        
+
+
     }
 }
