@@ -54,7 +54,22 @@
           "Port": 80
         }
       ],
-      "UpstreamHttpMethod": [ "Get" ] 
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/hello",
+      "DownstreamScheme": "ws",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "service-other",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/hello",
+      "QoSOptions": {
+        "TimeoutValue": 320000
+      },
+      "Priority": 50
     }
 
   ]

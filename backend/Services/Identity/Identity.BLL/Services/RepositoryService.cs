@@ -175,7 +175,7 @@ namespace Identity.BLL.Services
                 }),
                 Issuer = AuthOptions.ISSUER,
                 Audience = AuthOptions.AUDIENCE,
-                Expires = DateTime.UtcNow.AddMinutes(20),
+                Expires = DateTime.UtcNow.AddMinutes(999999),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
