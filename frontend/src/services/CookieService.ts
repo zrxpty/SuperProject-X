@@ -1,5 +1,5 @@
 // CookieService.ts
-import Cookies from '../../node_modules/js-cookie';
+import Cookies from 'js-cookie';
 
 const TOKEN_KEY = 'jwt_token';
 

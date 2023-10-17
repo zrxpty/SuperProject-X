@@ -1,6 +1,7 @@
+// @ts-ignore
 import { createRouter, createWebHistory } from 'vue-router';
-import Login from '../views/Account/Login.vue';
-import Register from '../views/Account/Register.vue';
+import Login from '@/views/Account/Login.vue';
+import Register from '@/views/Account/Register.vue';
 
 const routes = [
   {

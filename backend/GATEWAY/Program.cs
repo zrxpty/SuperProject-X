@@ -19,7 +19,7 @@ app.UseCors(policy =>
 });
 
 await app.UseOcelot();
-
+app.MapGet("/", () => "qweqweqweqweqweqeqweqwe12222222222222");
 app.UseAuthentication();
 app.UseAuthorization();
 

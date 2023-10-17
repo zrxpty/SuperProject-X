@@ -14,9 +14,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { AuthResponseModel } from '../../models/account/AuthResponseModel';
-import CookieService from '../../services/CookieService.ts';
-import auth from '../../state/auth';
+import { AuthResponseModel } from '@/models/account/AuthResponseModel';
+import CookieService from '@/services/CookieService';
+import auth from '@/state/auth';
 
 const username = ref<string>('');
 const password = ref<string>('');

@@ -15,9 +15,9 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import CookieService from '../services/CookieService.ts';
+import CookieService from '@/services/CookieService';
 import { useRouter } from 'vue-router';
-import auth from '../state/auth';
+import auth from '@/state/auth';
 
 const router = useRouter();
 
