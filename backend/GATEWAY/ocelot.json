@@ -13,6 +13,18 @@
       "UpstreamHttpMethod": [ "Post" ]
     },
     {
+      "UpstreamPathTemplate": "/api/Identity/login",
+      "DownstreamPathTemplate": "/api/Identity/login",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "service-identity",
+          "Port": 80
+        }
+      ],
+      "UpstreamHttpMethod": [ "Post" ]
+    },
+    {
       "UpstreamPathTemplate": "/api/Identity/qwe",
       "DownstreamPathTemplate": "/api/Identity/qwe",
       "DownstreamScheme": "http",

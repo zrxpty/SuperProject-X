@@ -31,6 +31,8 @@ namespace Identity.API.Controllers
             return Ok(await _accountService.Authenticate(input));
         }
 
+        
+
         [HttpGet("qwe")]
         [Authorize]
         public async Task<ActionResult> qwe()

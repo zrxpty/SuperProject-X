@@ -25,28 +25,16 @@ namespace Identity.BLL.Services
             _db = db;
             _configuration = configuration;
         }
-
+        
         public async Task<ServiceResponse<AuthenticationOutputModel>> Authenticate(AuthenticateInputModel input)
         {
             var user = await _db.UserAccounts
-                                .Where(x => x.Email == input.Login || x.Login == input.Login)
-                                .FirstOrDefaultAsync();
+                                .FirstOrDefaultAsync(x => x.Email == input.Login || x.Login == input.Login);
+           
 
             if (user != null && DecodeFrom64(user.Password) == input.Password)
             {
-                /*var token = await _db.Verifications.Where(x => x.UserAccountId == user.Id).FirstOrDefaultAsync();
-                if (token != null)
-                {
-                    token.Token = await GenerateToken(user);
-                }
-                else
-                {
-                    token.Token = await GenerateToken(user);
-                    token.UserAccountId = user.Id;
-
-                }*/
-
-                await _db.SaveChangesAsync();
+                var role = await _db.Roles.FirstOrDefaultAsync(role => role.UserAccountId == user.Id);
 
                 return new()
                 {
@@ -54,9 +42,10 @@ namespace Identity.BLL.Services
                     {
                         Login = user.Login,
                         Email = user.Email,
-                        Token = "",
-                        Role = (await _db.Roles.Where(x => x.UserAccountId == user.Id).FirstAsync()).Role
-                    }
+                        Token = GenerateToken(user, role.Role),
+                        Role = role.Role
+                    },
+                    Message = $"{user.Login} {user.Email}"
                 };
                
             }
@@ -64,6 +53,7 @@ namespace Identity.BLL.Services
             {
                 return new()
                 {
+                    Code = 401,
                     Message = "Пошел ты кого взломать хочешь?"
                 };
             }
@@ -81,7 +71,9 @@ namespace Identity.BLL.Services
             {
                 return new()
                 {
+                    Code = 401,
                     Message = "Пошел ты кого взломать хочешь?"
+
                 };
             }
 
@@ -89,6 +81,7 @@ namespace Identity.BLL.Services
             {
                 return new()
                 {
+                    Code = 401,
                     Message = "Пошел ты кого взломать хочешь?"
                 };
             }
@@ -119,7 +112,7 @@ namespace Identity.BLL.Services
                 Role = "user",
                 UserAccountId = user.Id
             };
-
+            await _db.Roles.AddAsync(role);
             await _db.SaveChangesAsync();
 
             return new() {
