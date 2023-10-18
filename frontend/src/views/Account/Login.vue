@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { AuthResponseModel } from '@/models/account/AuthResponseModel';
-import CookieService from '@/services/CookieService';
+import SessionService from '@/services/SessionService';
 import auth from '@/state/auth';
 
 const username = ref<string>('');
@@ -39,16 +39,16 @@ const login = async () => {
       // Получите ответ и преобразуйте его в объект AuthResponseModel
       const responseBody: AuthResponseModel = await response.json();
       if (responseBody.code !== 401) {
-
-        CookieService.saveToken(responseBody.data.token);
-        CookieService.saveUserData({
+        console.log(responseBody)
+        SessionService.saveToken(responseBody.data.token);
+        SessionService.saveUserData({
           email: responseBody.data.email,
           login: responseBody.data.login,
           role: responseBody.data.role,
         });
 
-        console.log('Токен:', CookieService.getToken());
-        console.log('Данные пользователя:', CookieService.getUserData());
+        console.log('Токен:', SessionService.getToken());
+        console.log('Данные пользователя:', SessionService.getUserData());
 
         auth.isAuthenticated.value = true;
         auth.username.value = responseBody.data.login;
@@ -80,3 +80,4 @@ button {
   cursor: pointer;
 }
 </style>
+@/services/SessionService

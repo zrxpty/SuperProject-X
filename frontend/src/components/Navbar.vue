@@ -15,15 +15,15 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import CookieService from '@/services/CookieService';
+import SessionService from '@/services/SessionService';
 import { useRouter } from 'vue-router';
 import auth from '@/state/auth';
 
 const router = useRouter();
 
 const outputCookieAndUserData = () => {
-  const token = CookieService.getToken() || null;
-  const userData = CookieService.getUserData() || null;
+  const token = SessionService.getToken() || null;
+  const userData = SessionService.getUserData() || null;
   if (token && userData) {
     auth.isAuthenticated.value = true;
     auth.username = userData.login;
@@ -34,8 +34,8 @@ const outputCookieAndUserData = () => {
 };
 
 const logout = () => {
-  CookieService.removeToken();
-  CookieService.removeUserData();
+  SessionService.removeToken();
+  SessionService.removeUserData();
   outputCookieAndUserData();
   auth.isAuthenticated.value = false;
   auth.username.value = '';
@@ -69,3 +69,4 @@ onMounted(() => {
   text-decoration: underline;
 }
 </style>
+@/services/SessionService
