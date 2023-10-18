@@ -4,7 +4,7 @@ using Identity.BLL.Models.OutputModels;
 
 namespace Identity.BLL.Inrefaces
 {
-    public interface IAccountService
+    public interface IIdentityService
     {
         Task<ServiceResponse<AuthenticationOutputModel>> Register(RegisterInputModel input);
         Task<ServiceResponse<AuthenticationOutputModel>> Authenticate(AuthenticateInputModel input);

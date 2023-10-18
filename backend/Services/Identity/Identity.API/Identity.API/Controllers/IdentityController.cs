@@ -12,9 +12,9 @@ namespace Identity.API.Controllers
     [ApiController]
     public class IdentityController : ControllerBase
     {
-        private readonly IAccountService _accountService;
+        private readonly IIdentityService _accountService;
 
-        public IdentityController(IAccountService accountService)
+        public IdentityController(IIdentityService accountService)
         {
             _accountService = accountService;
         }

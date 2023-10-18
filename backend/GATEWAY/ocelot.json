@@ -1,6 +1,7 @@
 ﻿{
   "Routes": [
     {
+      //identity
       "UpstreamPathTemplate": "/api/Identity/register",
       "DownstreamPathTemplate": "/api/Identity/register",
       "DownstreamScheme": "http",
@@ -27,6 +28,18 @@
     {
       "UpstreamPathTemplate": "/api/Identity/qwe",
       "DownstreamPathTemplate": "/api/Identity/qwe",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "service-identity",
+          "Port": 80
+        }
+      ],
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/User/getUsers",
+      "DownstreamPathTemplate": "/api/User/getUsers",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {

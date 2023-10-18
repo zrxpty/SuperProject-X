@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace Identity.BLL.Services
 {
-    public class AccountService : IAccountService
+    public class IdentityService : IIdentityService
     {
 
         private readonly IRepositotyService _repositotyService;
 
-        public AccountService(IRepositotyService repositotyService)
+        public IdentityService(IRepositotyService repositotyService)
         {
             _repositotyService = repositotyService;
         }
