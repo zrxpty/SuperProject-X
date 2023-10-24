@@ -50,7 +50,18 @@
       "UpstreamHttpMethod": [ "GET" ]
     },
 
-
+    {
+      "UpstreamPathTemplate": "/api/User/{id}", 
+      "DownstreamPathTemplate": "/api/User/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "service-identity",
+          "Port": 80
+        }
+      ],
+      "UpstreamHttpMethod": [ "GET" ]
+    },
 
 
 

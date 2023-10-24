@@ -1,5 +1,6 @@
 ﻿using Identity.BLL.Inrefaces;
 using Identity.BLL.Models.InputModels;
+using Identity.BLL.Models.OutputModels;
 using Identity.BLL.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -20,6 +21,8 @@ namespace Identity.API.Controllers
         }
 
         [HttpPost("register")]
+        [ProducesResponseType(typeof(AuthenticationOutputModel), 200)]
+        [ProducesResponseType(typeof(Exception), 500)]
         public async Task<ActionResult> Register([FromBody] RegisterInputModel input)
         {
             return Ok(await _accountService.Register(input));

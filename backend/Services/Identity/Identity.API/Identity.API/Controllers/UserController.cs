@@ -19,5 +19,11 @@ namespace Identity.API.Controllers
         {
             return Ok(await _userService.GetAllUsers());
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetUser(string id)
+        {
+            return Ok(await _userService.GetUser(id));
+        }
     }
 }

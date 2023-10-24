@@ -10,9 +10,6 @@ namespace JwtAuthenticationManager
         public const string KEY = "jZMhmripoIMmmUTSpujMtCEwXDFibIBN";
         public const int LIFETIME = 7; // in days
 
-        public static SymmetricSecurityKey GetSymmetricSecurityKey()
-        {
-            return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(KEY));
-        }
+        public static SymmetricSecurityKey GetSymmetricSecurityKey() => new SymmetricSecurityKey(Encoding.ASCII.GetBytes(KEY));
     }
 }

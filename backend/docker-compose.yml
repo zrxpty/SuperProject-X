@@ -14,7 +14,6 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
 
-
   service-identity:
     image: service-identity
     build:
@@ -41,7 +40,30 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     
+  server-grpc:
+    image: server-grpc
+    build: 
+      context: .
+      dockerfile: Services/GRPC/OtherServer/Dockerfile
+    ports:
+      - "5003:80"
+    hostname: service-grpc
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
 
+
+  test-grpc:
+    image: test-grpc
+    build: 
+      context: .
+      dockerfile: Services/GRPC/ClientApi/Dockerfile 
+    ports:
+      - "5004:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+
+# database
 
   postgres_identity:
     container_name: ps-identity
