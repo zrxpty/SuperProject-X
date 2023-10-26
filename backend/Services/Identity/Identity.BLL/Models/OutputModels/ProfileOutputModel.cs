@@ -2,8 +2,8 @@
 {
     public class ProfileOutputModel
     {
-        public string? Login { get; set; }
-        public string? sex { get; set; }
+        public required string Login { get; set; }
+        public string sex { get; set; } = null!;
         public string? City { get; set; }
         public string? Region { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
