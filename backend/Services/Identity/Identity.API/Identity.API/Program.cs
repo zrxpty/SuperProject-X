@@ -25,13 +25,13 @@ builder.Services.AddScoped<IUserService, UserService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-//using (var scope = app.Services.CreateScope())
-//{
-//    await using (var db = scope.ServiceProvider.GetRequiredService<IdentityDbContext>())
-//    {
-//        await db.Database.MigrateAsync();
-//    }
-//}
+using (var scope = app.Services.CreateScope())
+{
+    await using (var db = scope.ServiceProvider.GetRequiredService<IdentityDbContext>())
+    {
+        await db.Database.MigrateAsync();
+    }
+}
 
 if (app.Environment.IsDevelopment())
 {
