@@ -1,82 +1,67 @@
-  <template>
-    <nav class="navbar">
-      <div class="navbar-menu">
-        <div class="navbar-start">
-          <a v-if="auth.isAuthenticated.value" @click="toProfile" class="navbar-item">{{ auth.username }}</a>
-          <a v-if="auth.isAuthenticated.value" @click="logout" class="navbar-item">Logout</a>
+<template>
+  <div style="display: fle;">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <router-link to="/" class="navbar-brand" style="font-size: 32px; color: blueviolet;">Social Network</router-link>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="navbar-brand">
+          <a v-if="auth.isAuthenticated.value" @click="toProfile" class="nav-link" style="margin-right: 10px;">{{ auth.username }}</a>
+          <a v-if="auth.isAuthenticated.value" @click="logout" class="nav-link" style="margin-right: 10px;">Logout</a>
           <template v-else>
-            <router-link to="/login" class="navbar-item">Login</router-link>
-            <router-link to="/register" class="navbar-item">Register</router-link>
+            <router-link to="/login" class="nav-link" style="margin-right: 10px;">Login</router-link>
+            <router-link to="/register" class="nav-link" style="margin-right: 10px;">Register</router-link>
           </template>
-          <router-link to="/dolbaebiki" class="navbar-item">Dolbaebiki</router-link>
+          <router-link to="/dolbaebiki" class="nav-link" style="margin-right: 10px;">Пользователи</router-link>
         </div>
       </div>
-    </nav>
-  </template>
+    </div>
+  </nav>
+  </div>
+</template>
 
-  <script setup lang="ts">
-  import { onMounted, ref } from 'vue';
-  import SessionService from '@/services/SessionService';
-  import { useRouter } from 'vue-router';
-  import auth from '@/state/auth';
 
-  const router = useRouter();
-  const displayUsername = ref<string | null>(null);
-  
-  const outputCookieAndUserData = () => {
-    const token = SessionService.getToken() || null;
-    const userData = SessionService.getUserData() || null;
-    if (token && userData) {
-      auth.isAuthenticated.value = true;
-      auth.username = userData.login;
-      displayUsername.value = userData.login;
-    } else {
-      auth.isAuthenticated.value = false;
-      auth.username.value = null;
-    }
-  };
-  const toProfile = () => {
-    router.push(`/${auth.username}`)
-  }
-  const logout = () => {
-    SessionService.removeToken();
-    SessionService.removeUserData();
-    outputCookieAndUserData();
+<script setup lang="ts">
+import { onMounted, ref } from 'vue';
+import SessionService from '@/services/SessionService';
+import { useRouter } from 'vue-router';
+import auth from '@/state/auth';
+import { CAlert } from '@coreui/bootstrap-vue';
+const router = useRouter();
+const displayUsername = ref<string | null>(null);
+
+const outputCookieAndUserData = () => {
+  const token = SessionService.getToken() || null;
+  const userData = SessionService.getUserData() || null;
+  if (token && userData) {
+    auth.isAuthenticated.value = true;
+    auth.username = userData.login;
+    displayUsername.value = userData.login;
+  } else {
     auth.isAuthenticated.value = false;
-    auth.username.value = '';
-    // Перенаправьте пользователя на страницу логина
-    router.push('/login');
-  };
-
-  onMounted(() => {
-    outputCookieAndUserData();
-    console.log(auth.isAuthenticated)
-  });
-  </script>
-
-  <style scoped>
-  .navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 1rem;
-    z-index: 1000; /* Устанавливаем z-index, чтобы компонент Navbar был поверх других элементов */
+    auth.username.value = null;
   }
+};
 
-  .navbar-menu {
-    display: flex;
-  }
+const toProfile = () => {
+  router.push(`/${auth.username}`)
+};
 
-  .navbar-item {
-    color: white;
-    margin-right: 1rem;
-    text-decoration: none;
-  }
+const logout = () => {
+  SessionService.removeToken();
+  SessionService.removeUserData();
+  outputCookieAndUserData();
+  auth.isAuthenticated.value = false;
+  auth.username.value = '';
+  // Перенаправьте пользователя на страницу логина
+  router.push('/login');
+};
 
-  .navbar-item:hover {
-    text-decoration: underline;
-  }
+onMounted(() => {
+  outputCookieAndUserData();
+  console.log(auth.isAuthenticated)
+});
+</script>
 
-  /* Добавьте остальные стили, если необходимо */
-  </style>
+<style scoped>
+/* Добавьте дополнительные стили, если необходимо */
+</style>
