@@ -46,7 +46,7 @@ else
 
 app.UseRouting();
 
-app.MapGet("/", () => "qweqweqweqweqweqeqweqwe12222222222222");
+app.MapGet("/", () => "qweqweqweqweqweqeqweqwe1222222222222");
 
 app.UseAuthorization();
 
