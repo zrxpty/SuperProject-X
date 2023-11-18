@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Tools.Controller\Tools.Controller.csproj" />
+    <ProjectReference Include="..\..\..\Tools\Tools.Controller\Tools.Controller.csproj" />
     <ProjectReference Include="..\..\..\Tools\Tools.GenericModels\Tools.GenericModels.csproj" />
     <ProjectReference Include="..\..\Identity.BLL\Identity.BLL.csproj" />
     <ProjectReference Include="..\..\Identity.Data\Identity.Data.csproj" />
