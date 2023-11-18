@@ -14,6 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\Tools\Tools.GenericModels\Tools.GenericModels.csproj" />
 		<ProjectReference Include="..\Identity.Data\Identity.Data.csproj" />
 		<ProjectReference Include="..\JwtAuthenticationManager\JwtAuthenticationManager.csproj" />
 	</ItemGroup>

@@ -27,44 +27,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     
-  service-other:
-    image: service-other
-    build:
-      context: .
-      dockerfile: Services/Other/Other.Api/Dockerfile
-    ports:
-      - "5002:80"
-    depends_on:
-      - postgres_identity
-    hostname: service-other
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    
-  server-grpc:
-    image: server-grpc
-    build: 
-      context: .
-      dockerfile: Services/GRPC/OtherServer/Dockerfile
-    ports:
-      - "5003:80"
-    hostname: service-grpc
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-
-
-  test-grpc:
-    image: test-grpc
-    build: 
-      context: .
-      dockerfile: Services/GRPC/ClientApi/Dockerfile 
-    ports:
-      - "5004:80"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-
-
 # database
-
   postgres_identity:
     container_name: ps-identity
     image: postgres:latest
@@ -78,8 +41,6 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
-
-
   pgadmin:
     container_name: pgadmin4_container
     image: dpage/pgadmin4
@@ -89,7 +50,6 @@ services:
       PGADMIN_DEFAULT_PASSWORD: root
     ports:
       - "5050:80"
-
 
 networks:
   mynetwork:

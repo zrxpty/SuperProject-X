@@ -1,28 +1,27 @@
 ﻿using Identity.BLL.Inrefaces;
 using Identity.BLL.Models.InputModels;
-using Identity.BLL.Models.OutputModels;
-using Identity.BLL.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Runtime.CompilerServices;
+using Tools.Controller;
+using Tools.GenericModels;
 
 namespace Identity.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class IdentityController : ControllerBase
+    public class IdentityController : DefaultController
     {
         private readonly IIdentityService _accountService;
+        private readonly ILogger<IdentityController> _logger;
 
-        public IdentityController(IIdentityService accountService)
+        public IdentityController(IIdentityService accountService, ILogger<IdentityController> logger)
+        : base(logger) 
         {
             _accountService = accountService;
+            _logger = logger;
         }
 
         [HttpPost("register")]
-        [ProducesResponseType(typeof(AuthenticationOutputModel), 200)]
-        [ProducesResponseType(typeof(Exception), 500)]
         public async Task<ActionResult> Register([FromBody] RegisterInputModel input)
         {
             return Ok(await _accountService.Register(input));
@@ -34,14 +33,22 @@ namespace Identity.API.Controllers
             return Ok(await _accountService.Authenticate(input));
         }
 
-        
-
-        [HttpGet("qwe")]
         [Authorize]
-        public async Task<ActionResult> qwe()
-        {  
-             return Ok("qweqweqweqweqwe");
+        [HttpGet("example")]
+        public async Task<ActionResult> ExampleAction()
+        {
+            return await GetServiceResponseWithAuthAsync(YourServiceFunction);
         }
-        
+
+        private async Task<ServiceResponse<List<ClaimModel>>> YourServiceFunction(List<ClaimModel> userClaims)
+        {
+            var result = new ServiceResponse<List<ClaimModel>>()
+            {
+                Data = userClaims,
+                Message = string.Join(", ", userClaims)
+            };
+
+            return await Task.FromResult(result);
+        }
     }
 }

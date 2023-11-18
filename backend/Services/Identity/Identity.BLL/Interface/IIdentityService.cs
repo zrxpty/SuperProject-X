@@ -1,6 +1,6 @@
-﻿using Identity.BLL.Models;
-using Identity.BLL.Models.InputModels;
+﻿using Identity.BLL.Models.InputModels;
 using Identity.BLL.Models.OutputModels;
+using Tools.GenericModels;
 
 namespace Identity.BLL.Inrefaces
 {

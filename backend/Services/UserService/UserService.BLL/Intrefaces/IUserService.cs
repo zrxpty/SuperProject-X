@@ -1,7 +1,7 @@
-﻿using Identity.BLL.Models;
-using Identity.BLL.Models.OutputModels;
+﻿using Tools.GenericModels;
+using UserService.BLL.Models.OutputModels;
 
-namespace Identity.BLL.Interface
+namespace UserService.BLL.Intrefaces
 {
     public interface IUserService
     {

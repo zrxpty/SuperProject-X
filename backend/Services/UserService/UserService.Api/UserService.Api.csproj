@@ -1,12 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>3fdeb799-9da6-4013-a26c-529d05a6eae7</UserSecretsId>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerfileContext>..\..\..\..</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,11 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Tools.Controller\Tools.Controller.csproj" />
-    <ProjectReference Include="..\..\..\Tools\Tools.GenericModels\Tools.GenericModels.csproj" />
-    <ProjectReference Include="..\..\Identity.BLL\Identity.BLL.csproj" />
-    <ProjectReference Include="..\..\Identity.Data\Identity.Data.csproj" />
-    <ProjectReference Include="..\..\JwtAuthenticationManager\JwtAuthenticationManager.csproj" />
+    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>

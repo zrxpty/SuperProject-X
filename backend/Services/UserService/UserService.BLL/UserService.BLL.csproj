@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Tools\Tools.GenericModels\Tools.GenericModels.csproj" />
+    <ProjectReference Include="..\UserService.Data\UserService.Data.csproj" />
+  </ItemGroup>
+
+</Project>

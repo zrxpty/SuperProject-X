@@ -1,4 +1,4 @@
-﻿namespace Identity.BLL.Models.OutputModels
+﻿namespace UserService.BLL.Models.OutputModels
 {
     public class ProfileOutputModel
     {

@@ -8,6 +8,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["Services/Identity/Identity.API/Identity.API/Identity.API.csproj", "Services/Identity/Identity.API/Identity.API/"]
+COPY ["Tools.Controller/Tools.Controller.csproj", "Tools.Controller/"]
 COPY ["Services/Identity/Identity.BLL/Identity.BLL.csproj", "Services/Identity/Identity.BLL/"]
 COPY ["Services/Identity/Identity.Data/Identity.Data.csproj", "Services/Identity/Identity.Data/"]
 COPY ["Services/Identity/JwtAuthenticationManager/JwtAuthenticationManager.csproj", "Services/Identity/JwtAuthenticationManager/"]

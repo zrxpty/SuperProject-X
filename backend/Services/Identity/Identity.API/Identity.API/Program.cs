@@ -1,5 +1,4 @@
 using Identity.BLL.Inrefaces;
-using Identity.BLL.Interface;
 using Identity.BLL.Services;
 using Identity.Data;
 using JwtAuthenticationManager;
@@ -19,8 +18,6 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<IdentityDbContext>(o => o.UseNpgsql(connectionString));
 
 builder.Services.AddScoped<IIdentityService, IdentityService>();
-builder.Services.AddScoped<IRepositotyService, RepositoryService>();
-builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
