@@ -26,7 +26,15 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OtherServer", "Services\GRPC\OtherServer\OtherServer.csproj", "{54A74B96-1324-46AF-BB16-015B7C38B631}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protos", "Services\GRPC\Protos\Protos.csproj", "{F9BED361-9EC1-48F6-873C-224EF39C9386}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OtherServer", "Services\GRPC\OtherServer\OtherServer.csproj", "{54A74B96-1324-46AF-BB16-015B7C38B631}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientApi", "Services\GRPC\ClientApi\ClientApi.csproj", "{BF4F7150-0AD3-4C64-A0A7-45D46488B2BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protos", "Services\GRPC\Protos\Protos.csproj", "{F9BED361-9EC1-48F6-873C-224EF39C9386}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{39EA693F-FB84-41F6-9307-48A95207078F}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientApi", "Services\GRPC\ClientApi\ClientApi.csproj", "{BF4F7150-0AD3-4C64-A0A7-45D46488B2BB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{F7888E76-0CD3-4F3F-BC1D-E70DF44AF9B8}"
