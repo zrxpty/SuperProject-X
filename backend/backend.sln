@@ -23,11 +23,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Other.Api", "Services\Other
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GRPC", "GRPC", "{04EEEF17-8B63-4670-8F5A-44BE9763AB51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OtherServer", "Services\GRPC\OtherServer\OtherServer.csproj", "{54A74B96-1324-46AF-BB16-015B7C38B631}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OtherServer", "Services\GRPC\OtherServer\OtherServer.csproj", "{54A74B96-1324-46AF-BB16-015B7C38B631}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Protos", "Services\GRPC\Protos\Protos.csproj", "{F9BED361-9EC1-48F6-873C-224EF39C9386}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protos", "Services\GRPC\Protos\Protos.csproj", "{F9BED361-9EC1-48F6-873C-224EF39C9386}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientApi", "Services\GRPC\ClientApi\ClientApi.csproj", "{BF4F7150-0AD3-4C64-A0A7-45D46488B2BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientApi", "Services\GRPC\ClientApi\ClientApi.csproj", "{BF4F7150-0AD3-4C64-A0A7-45D46488B2BB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{39EA693F-FB84-41F6-9307-48A95207078F}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
