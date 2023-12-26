@@ -1,18 +1,9 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "moduleResolution": "node",
-    "useDefineForClassFields": true,
-    "module": "ESNext",
-    "strict": true,
-    "jsx": "preserve",
-    "sourceMap": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "lib": ["ESNext", "DOM"],
-    "skipLibCheck": true,
-    "paths": { "@/*":["./src/*"] },
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "next-env.d.ts",
   "pages/**/*",

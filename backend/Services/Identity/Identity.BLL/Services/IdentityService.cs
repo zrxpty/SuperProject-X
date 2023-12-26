@@ -24,97 +24,93 @@ namespace Identity.BLL.Services
             _db = db;
             _configuration = configuration;
         }
-        
+
         public async Task<ServiceResponse<AuthenticationOutputModel>> Authenticate(AuthenticateInputModel input)
         {
             var user = await _db.UserAccounts
                                 .FirstOrDefaultAsync(x => x.Email == input.Login || x.Login == input.Login);
-           
 
             if (user != null && DecodeFrom64(user.Password) == input.Password)
             {
-                var role = await _db.Roles.FirstOrDefaultAsync(role => role.UserAccountId == user.Id);
+                var role = await _db.Roles.FirstOrDefaultAsync(r => r.UserAccountId == user.Id);
 
-                return new()
+                var token = GenerateToken(user, role.Role);
+
+                var authenticationModel = new AuthenticationOutputModel
                 {
-                    Data = new AuthenticationOutputModel
-                    {
-                        Login = user.Login,
-                        Email = user.Email,
-                        Token = GenerateToken(user, role.Role),
-                        Role = role.Role
-                    },
+                    Login = user.Login,
+                    Email = user.Email,
+                    Token = token,
+                    Role = role.Role
+                };
+
+                return new ServiceResponse<AuthenticationOutputModel>
+                {
+                    Data = authenticationModel,
                     Message = $"{user.Login} {user.Email}"
                 };
-               
             }
             else
             {
-                return new()
+                return new ServiceResponse<AuthenticationOutputModel>
                 {
                     Code = 401,
-                    Message = "Пошел ты кого взломать хочешь?"
+                    Message = "Неверные учетные данные"
                 };
             }
         }
 
         public async Task<ServiceResponse<AuthenticationOutputModel>> Register(RegisterInputModel input)
         {
-            var userWithSameEmail = await _db.UserAccounts
-                .FirstOrDefaultAsync(x => x.Email == input.Email);
+            var userWithSameEmail = await _db.UserAccounts.FirstOrDefaultAsync(x => x.Email == input.Email);
+            var userWithSameLogin = await _db.UserAccounts.FirstOrDefaultAsync(x => x.Login == input.Login);
 
-            var userWithSameLogin = await _db.UserAccounts
-                .FirstOrDefaultAsync(x => x.Login == input.Login);
-
-            if (userWithSameEmail != null)
+            if (userWithSameEmail != null || userWithSameLogin != null)
             {
-                return new()
+                return new ServiceResponse<AuthenticationOutputModel>
                 {
                     Code = 401,
-                    Message = "Пошел ты кого взломать хочешь?"
-
+                    Message = "Пользователь с такими данными уже существует"
                 };
             }
 
-            if (userWithSameLogin != null)
-            {
-                return new()
-                {
-                    Code = 401,
-                    Message = "Пошел ты кого взломать хочешь?"
-                };
-            }
+            var encryptedPassword = EncryptPassword(input.Password);
 
-            var user = new UserAccount()
+            var newUser = new UserAccount
             {
                 Email = input.Email,
                 Login = input.Login,
-                Password = EncryptPassword(input.Password),
+                Password = encryptedPassword,
             };
 
-            await _db.UserAccounts.AddAsync(user);
+            await _db.UserAccounts.AddAsync(newUser);
             await _db.SaveChangesAsync();
 
-            var role = new Roles()
+            var role = new Roles
             {
                 Role = "user",
-                UserAccountId = user.Id
+                UserAccountId = newUser.Id
             };
+
             await _db.Roles.AddAsync(role);
             await _db.SaveChangesAsync();
 
-            return new() {
-                Data = new AuthenticationOutputModel
-                {
-                    Token = GenerateToken(user, role.Role),
-                    Email = input.Email,
-                    Login = input.Login,
-                    Role = role.Role
-                }
+            var token = GenerateToken(newUser, role.Role);
 
+            var authenticationModel = new AuthenticationOutputModel
+            {
+                Token = token,
+                Email = input.Email,
+                Login = input.Login,
+                Role = role.Role
+            };
+
+            return new ServiceResponse<AuthenticationOutputModel>
+            {
+                Data = authenticationModel
             };
         }
-
+        #region private
         private string EncryptPassword(string password)
         {
             try
@@ -164,7 +160,7 @@ namespace Identity.BLL.Services
             return tokenHandler.WriteToken(token);
         }
 
-
+        #endregion
 
     }
 }

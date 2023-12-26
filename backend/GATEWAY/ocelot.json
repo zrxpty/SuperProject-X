@@ -1,7 +1,8 @@
 ﻿{
   "Routes": [
+    //identity
     {
-      //identity
+
       "UpstreamPathTemplate": "/api/Identity/register",
       "DownstreamPathTemplate": "/api/Identity/register",
       "DownstreamScheme": "http",
@@ -49,14 +50,75 @@
       ],
       "UpstreamHttpMethod": [ "GET" ]
     },
-
     {
-      "UpstreamPathTemplate": "/api/User/{id}", 
+      "UpstreamPathTemplate": "/api/User/{id}",
       "DownstreamPathTemplate": "/api/User/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "service-identity",
+          "Port": 80
+        }
+      ],
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    //user-service
+    {
+      "UpstreamPathTemplate": "/api/User/profile/{id}",
+      "DownstreamPathTemplate": "/api/User/profile/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "service-user",
+          "Port": 80
+        }
+      ],
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/User/users",
+      "DownstreamPathTemplate": "/api/User/users",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "service-user",
+          "Port": 80
+        }
+      ],
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    //post-service
+    {
+      "UpstreamPathTemplate": "/api/Post/post",
+      "DownstreamPathTemplate": "/api/Post/post",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "service-post",
+          "Port": 80
+        }
+      ],
+      "UpstreamHttpMethod": [ "Post" ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/Post/posts",
+      "DownstreamPathTemplate": "/api/Post/posts",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "service-post",
+          "Port": 80
+        }
+      ],
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/Post/posts/{id}",
+      "DownstreamPathTemplate": "/api/Post/posts/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "service-post",
           "Port": 80
         }
       ],

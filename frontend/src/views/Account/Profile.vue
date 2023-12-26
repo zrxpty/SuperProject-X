@@ -1,5 +1,5 @@
 <template>
-    qweqwe
+    Тут должен быть профиль
   </template>
   
   <script setup lang="ts">

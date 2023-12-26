@@ -17,7 +17,9 @@ namespace UserService.BLL.Services
 
         public async Task<ServiceResponse<List<UserOutputModel>>> GetAllUsers()
         {
-            return new();
+            return new() { 
+                Data = await _db.Profiles.Select(x => new UserOutputModel(x.UserAccount)).ToListAsync()
+            };
         }
 
         public async Task<ServiceResponse<ProfileOutputModel>> GetUser(string id)
@@ -25,7 +27,7 @@ namespace UserService.BLL.Services
             var user = await _db.Profiles.FirstOrDefaultAsync(u => u.UserAccount == id);
             return new()
             {
-                
+                Data = new(await _db.Profiles.FirstOrDefaultAsync(p => p.UserAccount == id))
             };
         }
     }
